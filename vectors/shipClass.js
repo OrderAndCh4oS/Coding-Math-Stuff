@@ -8,7 +8,6 @@ var shipClass = {
     radius: 0,
     bounce: -1,
     angle: 0,
-    turning: false,
     direction: "left",
     turningCountdown: 0,
     thrustingCountdown: 0,
@@ -28,40 +27,39 @@ var shipClass = {
     },
 
     update: function() {
-        var thrust = vector.create(0, 0);
+        this.thrust = vector.create(0, 0);
 
         if (this.thrustingCountdown === 0) {
             this.thrusting = false;
-            if(Math.random() > 0.8) {
+            if(Math.random() > 0.95) {
                 this.thrusting = true;
-                this.thrustingCountdown = Math.floor(Math.random() * 10) + 1;
+                this.thrustingCountdown = Math.floor(Math.random() * 3) + 1;
             }
         }
 
         if (this.turningCountdown === 0) {
             this.direction = Math.random() < 0.5 ? "left" : "right";
-            if(Math.random() > 0.7) {
-                this.turningCountdown = Math.floor(Math.random() * 5) + 1;
+            if(Math.random() > 0.85) {
+                this.turningCountdown = Math.floor(Math.random() * 25) + 1;
             }
         } else {
-            if (this.direction === "left ") {
+            if (this.direction === "left") {
                 this.turnLeft();
             } else {
                 this.turnRight();
             }
-            thrust.setAngle(this.angle);
             this.turningCountdown--;
         }
 
+
         if (this.isThrusting()) {
-            thrust.setLength(0.1);
+            this.thrust.setLength(0.1);
             this.thrustingCountdown--;
         } else {
-            thrust.setLength(0);
+            this.thrust.setLength(0);
         }
 
-        this.accelerate(thrust);
-
+        this.thrust.setAngle(this.angle);
         this.velocity.addTo(this.gravity);
         this.position.addTo(this.velocity);
     },
@@ -94,23 +92,21 @@ var shipClass = {
     },
 
     isThrusting: function() {
-        return this.thrust !== null;
+        return this.thrusting;
     },
-    
+
     turnLeft: function () {
         this.angle -= 0.05;
-        this.turning = true;
     },
 
     turnRight: function () {
         this.angle += 0.05;
-        this.turning = true;
     },
 
     stopTurning: function () {
         this.turning = false;
     },
-    
+
     isTurning: function () {
         return this.turning;
     }
