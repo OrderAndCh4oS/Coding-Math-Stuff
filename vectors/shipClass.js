@@ -62,6 +62,7 @@ var shipClass = {
         this.thrust.setAngle(this.angle);
         this.velocity.addTo(this.gravity);
         this.position.addTo(this.velocity);
+        this.accelerate(this.thrust);
     },
 
     angleTo: function(p2) {
