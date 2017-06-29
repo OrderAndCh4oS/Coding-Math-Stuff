@@ -10,6 +10,7 @@ window.onload = function() {
         var ship = shipClass.create(Math.random() * (width), Math.random() * (height), 0, 0);
         ship.friction = 0.99;
         ship.colour = i % 2 === 0 ? "#ff0000" : "#00ff00";
+        ship.angle = i % 2 === 0 ? 0 : Math.PI;
         ships.push(ship);
     }
 
