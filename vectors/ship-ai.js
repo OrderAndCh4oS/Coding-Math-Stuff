@@ -6,7 +6,7 @@ window.onload = function() {
         ships = [],
         deadShips = [];
 
-    for (var i = 50; i > 0; i--) {
+    for (var i = 100; i > 0; i--) {
         var ship = shipClass.create(Math.random() * (width), Math.random() * (height), 0, 0);
         ship.friction = 0.99;
         ships.push(ship);
@@ -17,10 +17,22 @@ window.onload = function() {
     function update() {
         context.clearRect(0, 0, width, height);
         for (var i = ships.length - 1; i >= 0; i--) {
-            var ship = ships[i];
-            var hit = false;
-            for (var j = i - 1; j >= 0; j--) {
-                if (ship.distanceTo(ships[j]) < 10) {
+            var ship = ships[i],
+                hit = false,
+                angleToNearest = 0,
+                nearest = false;
+
+            for (var j = ships.length - 1; j >= 0; j--) {
+                var distance = ship.distanceTo(ships[j]);
+                if(!nearest && i !== j) {
+                    angleToNearest = ship.angleTo(ships[j]);
+                    nearest = distance
+                }
+                if (distance < nearest && i !== j) {
+                    angleToNearest = ship.angleTo(ships[j]);
+                    nearest = distance;
+                }
+                if (distance < 10 && i !== j) {
                     if (Math.random > 0.5) {
                         deadShips.push(j);
                     } else {
@@ -28,6 +40,21 @@ window.onload = function() {
                     }
                 }
             }
+
+            if (angleToNearest >= 0.02) {
+                ship.turnLeft();
+            } else if (angleToNearest <= -0.02 ) {
+                ship.turnRight();
+            } else {
+                ship.stopTurning();
+            }
+
+            if (angleToNearest <= 1.6 && angleToNearest >= -1.6 ) {
+                ship.startThrusting();
+            } else {
+                ship.stopThrusting();
+            }
+
             if (!hit) {
                 ship.update();
                 context.save();
@@ -64,12 +91,11 @@ window.onload = function() {
         for (var k = deadShips.length - 1; k >= 0; k--) {
             var index = deadShips[k];
             context.save();
-            console.log(deadShips);
             context.translate(ships[index].position.getX(), ships[index].position.getY());
+            context.beginPath();
             context.arc(0, 0, 20, 0, 2 * Math.PI);
             context.fillStyle = "red";
             context.fill();
-            context.closePath();
             context.restore();
             ships.splice(index, 1);
             deadShips.pop();

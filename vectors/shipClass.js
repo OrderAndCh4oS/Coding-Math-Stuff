@@ -29,28 +29,27 @@ var shipClass = {
     update: function() {
         this.thrust = vector.create(0, 0);
 
-        if (this.thrustingCountdown === 0) {
-            this.thrusting = false;
-            if(Math.random() > 0.95) {
-                this.thrusting = true;
-                this.thrustingCountdown = Math.floor(Math.random() * 3) + 1;
-            }
-        }
+        // if (this.thrustingCountdown === 0) {
+        //     this.thrusting = false;
+        //     if(Math.random() > 0.95) {
+        //         this.thrusting = true;
+        //         this.thrustingCountdown = Math.floor(Math.random() * 3) + 1;
+        //     }
+        // }
 
-        if (this.turningCountdown === 0) {
-            this.direction = Math.random() < 0.5 ? "left" : "right";
-            if(Math.random() > 0.85) {
-                this.turningCountdown = Math.floor(Math.random() * 25) + 1;
-            }
-        } else {
-            if (this.direction === "left") {
-                this.turnLeft();
-            } else {
-                this.turnRight();
-            }
-            this.turningCountdown--;
-        }
-
+        // if (this.turningCountdown === 0) {
+        //     this.direction = Math.random() < 0.5 ? "left" : "right";
+        //     if(Math.random() > 0.85) {
+        //         this.turningCountdown = Math.floor(Math.random() * 25) + 1;
+        //     }
+        // } else {
+        //     if (this.direction === "left") {
+        //         this.turnLeft();
+        //     } else {
+        //         this.turnRight();
+        //     }
+        //     this.turningCountdown--;
+        // }
 
         if (this.isThrusting()) {
             this.thrust.setLength(0.1);
@@ -60,6 +59,7 @@ var shipClass = {
         }
 
         this.thrust.setAngle(this.angle);
+        this.velocity.multiplyBy(this.friction);
         this.velocity.addTo(this.gravity);
         this.position.addTo(this.velocity);
         this.accelerate(this.thrust);
@@ -88,8 +88,12 @@ var shipClass = {
         this.velocity.addTo(gravity);
     },
 
-    toggleThrusting: function () {
-      this.thrusting = !this.thrusting;
+    startThrusting: function () {
+      this.thrusting = true;
+    },
+
+    stopThrusting: function () {
+      this.thrusting = false;
     },
 
     isThrusting: function() {
@@ -97,11 +101,11 @@ var shipClass = {
     },
 
     turnLeft: function () {
-        this.angle -= 0.05;
+        this.angle -= 0.01;
     },
 
     turnRight: function () {
-        this.angle += 0.05;
+        this.angle += 0.01;
     },
 
     stopTurning: function () {
