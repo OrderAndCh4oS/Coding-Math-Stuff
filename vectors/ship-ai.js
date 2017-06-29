@@ -9,10 +9,15 @@ window.onload = function() {
     for (var i = 100; i > 0; i--) {
         var ship = shipClass.create(Math.random() * (width), Math.random() * (height), 0, 0);
         ship.friction = 0.99;
+        ship.colour = i % 2 === 0 ? "#ff0000" : "#00ff00";
         ships.push(ship);
     }
 
     update();
+
+    function howClose(x, y) {
+        return Math.atan2(Math.sin(x - y), Math.cos(x - y));
+    }
 
     function update() {
         context.clearRect(0, 0, width, height);
@@ -23,33 +28,50 @@ window.onload = function() {
                 nearest = false;
 
             for (var j = ships.length - 1; j >= 0; j--) {
-                var distance = ship.distanceTo(ships[j]);
-                if(!nearest && i !== j) {
-                    angleToNearest = ship.angleTo(ships[j]);
-                    nearest = distance
-                }
-                if (distance < nearest && i !== j) {
-                    angleToNearest = ship.angleTo(ships[j]);
-                    nearest = distance;
-                }
-                if (distance < 10 && i !== j) {
-                    if (Math.random > 0.5) {
-                        deadShips.push(j);
-                    } else {
-                        deadShips.push(i);
+                if (ships[j].colour !== ship.colour) {
+                    var distance = ship.distanceTo(ships[j]);
+                    if (!nearest && i !== j) {
+                        angleToNearest = ship.angleTo(ships[j]);
+                        nearest = distance;
+                    }
+                    if (distance < nearest && i !== j) {
+                        angleToNearest = ship.angleTo(ships[j]);
+                        nearest = distance;
+                    }
+                    if (distance < 10 && i !== j && j < i) {
+                        if (Math.random >= 0.5) {
+                            deadShips.push(j);
+                        } else {
+                            deadShips.push(i);
+                        }
                     }
                 }
             }
 
-            if (angleToNearest >= 0.02) {
-                ship.turnLeft();
-            } else if (angleToNearest <= -0.02 ) {
-                ship.turnRight();
-            } else {
-                ship.stopTurning();
+            switch (true) {
+                case (howClose(ship.angle, angleToNearest) >= 0.2):
+                    ship.turnLeft(0.04);
+                    break;
+                case (howClose(ship.angle, angleToNearest) >= 0.1):
+                    ship.turnLeft(0.01);
+                    break;
+                case (howClose(ship.angle, angleToNearest) > 0):
+                    ship.turnLeft(howClose(ship.angle, angleToNearest));
+                    break;
+                case (howClose(ship.angle, angleToNearest) <= -0.2):
+                    ship.turnRight(0.04);
+                    break;
+                case (howClose(ship.angle, angleToNearest) <= -0.1):
+                    ship.turnRight(0.01);
+                    break;
+                case (howClose(ship.angle, angleToNearest) < 0):
+                    ship.turnRight(howClose(ship.angle, angleToNearest));
+                    break;
+                default:
+                    ship.stopTurning();
             }
 
-            if (angleToNearest <= 1.6 && angleToNearest >= -1.6 ) {
+            if (angleToNearest <= 1.4 && angleToNearest >= -1.4) {
                 ship.startThrusting();
             } else {
                 ship.stopThrusting();
@@ -69,6 +91,7 @@ window.onload = function() {
                     context.moveTo(-10, 0);
                     context.lineTo(-15, 0);
                 }
+                context.strokeStyle = ship.colour;
                 context.stroke();
 
                 context.restore();

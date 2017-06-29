@@ -11,6 +11,7 @@ var shipClass = {
     direction: "left",
     turningCountdown: 0,
     thrustingCountdown: 0,
+    colour: "#ff00ff",
 
     create: function(x, y, speed, direction, gravity) {
         var obj = Object.create(this);
@@ -28,28 +29,6 @@ var shipClass = {
 
     update: function() {
         this.thrust = vector.create(0, 0);
-
-        // if (this.thrustingCountdown === 0) {
-        //     this.thrusting = false;
-        //     if(Math.random() > 0.95) {
-        //         this.thrusting = true;
-        //         this.thrustingCountdown = Math.floor(Math.random() * 3) + 1;
-        //     }
-        // }
-
-        // if (this.turningCountdown === 0) {
-        //     this.direction = Math.random() < 0.5 ? "left" : "right";
-        //     if(Math.random() > 0.85) {
-        //         this.turningCountdown = Math.floor(Math.random() * 25) + 1;
-        //     }
-        // } else {
-        //     if (this.direction === "left") {
-        //         this.turnLeft();
-        //     } else {
-        //         this.turnRight();
-        //     }
-        //     this.turningCountdown--;
-        // }
 
         if (this.isThrusting()) {
             this.thrust.setLength(0.1);
@@ -88,6 +67,10 @@ var shipClass = {
         this.velocity.addTo(gravity);
     },
 
+    incrementAngle: function(increment) {
+        this.angle += increment;
+    },
+
     startThrusting: function () {
       this.thrusting = true;
     },
@@ -100,12 +83,12 @@ var shipClass = {
         return this.thrusting;
     },
 
-    turnLeft: function () {
-        this.angle -= 0.01;
+    turnLeft: function (turnSpeed) {
+        this.incrementAngle(-turnSpeed);
     },
 
-    turnRight: function () {
-        this.angle += 0.01;
+    turnRight: function (turnSpeed) {
+        this.incrementAngle(turnSpeed);
     },
 
     stopTurning: function () {
