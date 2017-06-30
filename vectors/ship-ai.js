@@ -6,6 +6,7 @@ window.onload = function() {
         ships = [],
         deadShips = [];
 
+
     for (var i = 100; i > 0; i--) {
         var ship = shipClass.create(Math.random() * (width), Math.random() * (height), 0, 0);
         ship.friction = 0.99;
@@ -22,6 +23,8 @@ window.onload = function() {
 
     function update() {
         context.clearRect(0, 0, width, height);
+        context.fillStyle = "#000";
+        context.fillRect(0, 0, width, height);
         for (var i = ships.length - 1; i >= 0; i--) {
             var ship = ships[i],
                 hit = false,
@@ -94,6 +97,8 @@ window.onload = function() {
                 }
                 context.strokeStyle = ship.colour;
                 context.stroke();
+                context.fillStyle = ship.colour;
+                context.fill();
 
                 context.restore();
 
