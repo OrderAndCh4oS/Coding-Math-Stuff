@@ -75,7 +75,7 @@ window.onload = function() {
                     ship.stopTurning();
             }
 
-            if (howClose(ship.angle, angleToNearest) <= (Math.PI/2.2) && howClose(ship.angle, angleToNearest) >= -(Math.PI/2.2)) {
+            if (howClose(ship.angle, angleToNearest) <= (Math.PI/3) && howClose(ship.angle, angleToNearest) >= -(Math.PI/3)) {
                 ship.startThrusting();
             } else {
                 ship.stopThrusting();
