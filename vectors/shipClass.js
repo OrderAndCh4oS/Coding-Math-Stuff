@@ -44,6 +44,24 @@ var shipClass = {
         this.accelerate(this.thrust);
     },
 
+    draw: function(context) {
+        context.translate(this.position.getX(), this.position.getY());
+        context.rotate(this.angle);
+        context.beginPath();
+        context.moveTo(10, 0);
+        context.lineTo(-10, -7);
+        context.lineTo(-10, 7);
+        context.lineTo(10, 0);
+        if (this.thrusting) {
+            context.moveTo(-10, 0);
+            context.lineTo(-15, 0);
+        }
+        context.strokeStyle = this.colour;
+        context.stroke();
+        context.fillStyle = this.colour;
+        context.fill();
+    },
+
     angleTo: function(p2) {
         return Math.atan2(
                 p2.position.getY() - this.position.getY(),

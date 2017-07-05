@@ -75,7 +75,7 @@ window.onload = function() {
                     ship.stopTurning();
             }
 
-            if (angleToNearest <= 1.4 && angleToNearest >= -1.4) {
+            if (howClose(ship.angle, angleToNearest) <= (Math.PI/2.2) && howClose(ship.angle, angleToNearest) >= -(Math.PI/2.2)) {
                 ship.startThrusting();
             } else {
                 ship.stopThrusting();
@@ -84,22 +84,7 @@ window.onload = function() {
             if (!hit) {
                 ship.update();
                 context.save();
-                context.translate(ship.position.getX(), ship.position.getY());
-                context.rotate(ship.angle);
-                context.beginPath();
-                context.moveTo(10, 0);
-                context.lineTo(-10, -7);
-                context.lineTo(-10, 7);
-                context.lineTo(10, 0);
-                if (ship.thrusting) {
-                    context.moveTo(-10, 0);
-                    context.lineTo(-15, 0);
-                }
-                context.strokeStyle = ship.colour;
-                context.stroke();
-                context.fillStyle = ship.colour;
-                context.fill();
-
+                ship.draw(context);
                 context.restore();
 
                 if (ship.position.getX() > width) {
