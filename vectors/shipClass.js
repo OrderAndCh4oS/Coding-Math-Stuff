@@ -12,6 +12,7 @@ var shipClass = {
     turningCountdown: 0,
     thrustingCountdown: 0,
     colour: "#ff00ff",
+    friction: 1,
 
     create: function(x, y, speed, direction, gravity) {
         var obj = Object.create(this);
@@ -27,21 +28,32 @@ var shipClass = {
         this.velocity.addTo(accel);
     },
 
-    update: function() {
-        this.thrust = vector.create(0, 0);
+    predictedAcceleration: function() {
+        var ghostShip = particle.create(this.position.getX(), this.position.getY(), this.velocity.getLength(), this.velocity.getAngle(), this.gravity);
+        var thrust = this.setThrust();
+        ghostShip.accelerate(thrust);
+        return ghostShip;
+    },
+
+    setThrust: function () {
+        var thrust = vector.create(0, 0);
 
         if (this.isThrusting()) {
-            this.thrust.setLength(0.1);
-            this.thrustingCountdown--;
+            thrust.setLength(0.1);
         } else {
-            this.thrust.setLength(0);
+            thrust.setLength(0);
         }
 
-        this.thrust.setAngle(this.angle);
+        thrust.setAngle(this.angle);
+        return thrust;
+    },
+
+    update: function() {
+        var thrust = this.setThrust();
         this.velocity.multiplyBy(this.friction);
         this.velocity.addTo(this.gravity);
         this.position.addTo(this.velocity);
-        this.accelerate(this.thrust);
+        this.accelerate(thrust);
     },
 
     draw: function(context) {

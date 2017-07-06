@@ -35,11 +35,12 @@ window.onload = function() {
                 if (ships[j].colour !== ship.colour) {
                     var distance = ship.distanceTo(ships[j]);
                     if (!nearest && i !== j) {
-                        angleToNearest = ship.angleTo(ships[j]);
+                       // console.log(ships[j].predictedAcceleration());
+                        angleToNearest = ship.angleTo(ships[j].predictedAcceleration());
                         nearest = distance;
                     }
                     if (distance < nearest && i !== j) {
-                        angleToNearest = ship.angleTo(ships[j]);
+                        angleToNearest = ship.angleTo(ships[j].predictedAcceleration());
                         nearest = distance;
                     }
                     if (distance < 10 && i !== j && j < i) {
@@ -53,19 +54,19 @@ window.onload = function() {
             }
 
             switch (true) {
-                case (howClose(ship.angle, angleToNearest) >= 0.2):
-                    ship.turnLeft(0.04);
+                case (howClose(ship.angle, angleToNearest) >= 0.3):
+                    ship.turnLeft(0.03);
                     break;
-                case (howClose(ship.angle, angleToNearest) >= 0.1):
+                case (howClose(ship.angle, angleToNearest) >= 0.2):
                     ship.turnLeft(0.01);
                     break;
                 case (howClose(ship.angle, angleToNearest) > 0):
                     ship.turnLeft(howClose(ship.angle, angleToNearest));
                     break;
-                case (howClose(ship.angle, angleToNearest) <= -0.2):
-                    ship.turnRight(0.04);
+                case (howClose(ship.angle, angleToNearest) <= -0.4):
+                    ship.turnRight(0.03);
                     break;
-                case (howClose(ship.angle, angleToNearest) <= -0.1):
+                case (howClose(ship.angle, angleToNearest) <= -0.2):
                     ship.turnRight(0.01);
                     break;
                 case (howClose(ship.angle, angleToNearest) < 0):
@@ -75,7 +76,7 @@ window.onload = function() {
                     ship.stopTurning();
             }
 
-            if (howClose(ship.angle, angleToNearest) <= (Math.PI/3) && howClose(ship.angle, angleToNearest) >= -(Math.PI/3)) {
+            if (howClose(ship.angle, angleToNearest) <= (Math.PI/3.1) && howClose(ship.angle, angleToNearest) >= -(Math.PI/3.1)) {
                 ship.startThrusting();
             } else {
                 ship.stopThrusting();
