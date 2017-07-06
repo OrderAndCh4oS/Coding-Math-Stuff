@@ -54,10 +54,10 @@ window.onload = function() {
             }
 
             switch (true) {
-                case (howClose(ship.angle, angleToNearest) >= 0.3):
+                case (howClose(ship.angle, angleToNearest) >= 0.4):
                     ship.turnLeft(0.03);
                     break;
-                case (howClose(ship.angle, angleToNearest) >= 0.2):
+                case (howClose(ship.angle, angleToNearest) >= 0.1):
                     ship.turnLeft(0.01);
                     break;
                 case (howClose(ship.angle, angleToNearest) > 0):
@@ -66,7 +66,7 @@ window.onload = function() {
                 case (howClose(ship.angle, angleToNearest) <= -0.4):
                     ship.turnRight(0.03);
                     break;
-                case (howClose(ship.angle, angleToNearest) <= -0.2):
+                case (howClose(ship.angle, angleToNearest) <= -0.1):
                     ship.turnRight(0.01);
                     break;
                 case (howClose(ship.angle, angleToNearest) < 0):
