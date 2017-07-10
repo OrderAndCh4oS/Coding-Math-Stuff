@@ -1,4 +1,6 @@
 var shipClass = {
+    id: -1,
+    kills: 0,
     position: null,
     velocity: null,
     thrust: null,
@@ -6,13 +8,8 @@ var shipClass = {
     thrustPower: 0,
     speed: 0.1,
     turningSpeed: 1,
-    mass: 1,
-    radius: 0,
-    bounce: -1,
     angle: 0,
     direction: "left",
-    turningCountdown: 0,
-    thrustingCountdown: 0,
     colour: "#ff00ff",
     friction: 1,
 
@@ -47,8 +44,6 @@ var shipClass = {
     setThrust: function () {
         this.thrust = vector.create(0, 0);
         if (this.isThrusting()) {
-            console.log(this.speed);
-            console.log(this.thrustPower);
             this.thrust.setLength(this.speed * this.thrustPower);
         } else {
             this.thrust.setLength(0);
@@ -79,6 +74,10 @@ var shipClass = {
         context.stroke();
         context.fillStyle = this.colour;
         context.fill();
+        context.font = "11px Verdana";
+        context.fillText(this.kills, -12, -12);
+        context.fillStyle = "#000";
+        context.fillText(this.id, -7, 0);
     },
 
     angleTo: function (p2) {
@@ -92,16 +91,6 @@ var shipClass = {
         var dx = p2.position.getX() - this.position.getX(),
             dy = p2.position.getY() - this.position.getY();
         return Math.sqrt(dx * dx + dy * dy);
-    },
-
-    gravitateTo: function (p2) {
-        var gravity = vector.create(0, 0),
-            dist = this.distanceTo(p2);
-
-        gravity.setLength(p2.mass / (dist * dist));
-        gravity.setAngle(this.angleTo(p2));
-
-        this.velocity.addTo(gravity);
     },
 
     incrementAngle: function (increment) {

@@ -6,11 +6,34 @@ window.onload = function() {
         ships = [],
         deadShips = [];
 
+    function isInArray(value, array) {
+        return array.indexOf(value) > -1;
+    }
 
     for (var i = 100; i > 0; i--) {
         var ship = shipClass.create(Math.random() * (width), Math.random() * (height), (Math.random() * 0.2) + 0.1, (Math.random() * 0.5) + 0.5);
         ship.friction = 0.99;
-        ship.colour = i % 2 === 0 ? "#ff0000" : "#00ff00";
+        switch (i % 6) {
+            case 0:
+                ship.colour = "#ff0000";
+                break;
+            case 1:
+                ship.colour = "#ff00ff";
+                break;
+            case 2:
+                ship.colour = "#00ff00";
+                break;
+            case 3:
+                ship.colour = "#00ffff";
+                break;
+            case 4:
+                ship.colour = "#0000ff";
+                break;
+            case 5:
+                ship.colour = "#ffff00";
+                break;
+        }
+        ship.id = i;
         ship.angle = i % 2 === 0 ? 0 : Math.PI;
         ships.push(ship);
     }
@@ -42,31 +65,39 @@ window.onload = function() {
                         angleToNearest = ships[j].angleToPredictedLocation(ship);
                         nearest = distance;
                     }
-                    if (distance < 10 && i !== j && j < i) {
+                    if (distance < 12 && i !== j && !isInArray(i, deadShips) && !isInArray(j, deadShips)) {
                         if (Math.random >= 0.5) {
                             deadShips.push(j);
+                            ships[i].kills++;
                         } else {
                             deadShips.push(i);
+                            ships[j].kills++;
                         }
                     }
                 }
             }
 
             switch (true) {
-                case (howClose(ship.angle, angleToNearest) >= 0.5):
-                    ship.turnLeft(0.06);
+                case (howClose(ship.angle, angleToNearest) >= 0.6):
+                    ship.turnLeft(ship.turningSpeed * 0.1);
                     break;
-                case (howClose(ship.angle, angleToNearest) >= 0.15):
-                    ship.turnLeft(0.03);
+                case (howClose(ship.angle, angleToNearest) >= 0.4):
+                    ship.turnLeft(ship.turningSpeed * 0.1 / 3 * 2);
+                    break;
+                case (howClose(ship.angle, angleToNearest) >= 0.2):
+                    ship.turnLeft(ship.turningSpeed * 0.1 / 3);
                     break;
                 case (howClose(ship.angle, angleToNearest) > 0):
                     ship.turnLeft(howClose(ship.angle, angleToNearest));
                     break;
-                case (howClose(ship.angle, angleToNearest) <= -0.5):
-                    ship.turnRight(0.06);
+                case (howClose(ship.angle, angleToNearest) <= -0.6):
+                    ship.turnRight(ship.turningSpeed * 0.1);
                     break;
-                case (howClose(ship.angle, angleToNearest) <= -0.15):
-                    ship.turnRight(0.03);
+                case (howClose(ship.angle, angleToNearest) <= -0.4):
+                    ship.turnRight(ship.turningSpeed * 0.1 / 3 * 2);
+                    break;
+                case (howClose(ship.angle, angleToNearest) <= -0.2):
+                    ship.turnRight(ship.turningSpeed * 0.1 / 3);
                     break;
                 case (howClose(ship.angle, angleToNearest) < 0):
                     ship.turnRight(howClose(ship.angle, angleToNearest));
