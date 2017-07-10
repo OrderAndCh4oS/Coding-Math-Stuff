@@ -1,9 +1,11 @@
 var shipClass = {
     position: null,
     velocity: null,
-    gravity: null,
     thrust: null,
     thrusting: false,
+    thrustPower: 0,
+    speed: 0.1,
+    turningSpeed: 1,
     mass: 1,
     radius: 0,
     bounce: -1,
@@ -14,49 +16,54 @@ var shipClass = {
     colour: "#ff00ff",
     friction: 1,
 
-    create: function(x, y, speed, direction, gravity) {
+    create: function (x, y, speed, turningSpeed) {
         var obj = Object.create(this);
         obj.position = vector.create(x, y);
         obj.velocity = vector.create(0, 0);
-        obj.velocity.setLength(speed);
-        obj.velocity.setAngle(direction);
-        obj.gravity = vector.create(0, gravity || 0);
+        obj.velocity.setLength(0);
+        obj.velocity.setAngle(Math.random() * Math.PI);
+        obj.speed = speed;
+        obj.turningSpeed = turningSpeed;
         return obj;
     },
 
-    accelerate: function(accel) {
+    accelerate: function (accel) {
         this.velocity.addTo(accel);
     },
 
-    predictedAcceleration: function() {
-        var ghostShip = particle.create(this.position.getX(), this.position.getY(), this.velocity.getLength(), this.velocity.getAngle(), this.gravity);
-        var thrust = this.setThrust();
-        ghostShip.accelerate(thrust);
-        return ghostShip;
+    angleToPredictedLocation: function (ship) {
+        var ghostShip = vector.create(this.position.getX(), this.position.getY());
+        ghostShip.setLength(this.position.getLength());
+        ghostShip.setAngle(this.position.getAngle());
+        this.velocity.multiplyBy(this.friction);
+        this.setThrust();
+        ghostShip.addTo(this.thrust);
+        return Math.atan2(
+            ghostShip.getY() - ship.position.getY(),
+            ghostShip.getX() - ship.position.getX()
+        );
     },
 
     setThrust: function () {
-        var thrust = vector.create(0, 0);
-
+        this.thrust = vector.create(0, 0);
         if (this.isThrusting()) {
-            thrust.setLength(0.1);
+            console.log(this.speed);
+            console.log(this.thrustPower);
+            this.thrust.setLength(this.speed * this.thrustPower);
         } else {
-            thrust.setLength(0);
+            this.thrust.setLength(0);
         }
-
-        thrust.setAngle(this.angle);
-        return thrust;
+        this.thrust.setAngle(this.angle);
     },
 
-    update: function() {
-        var thrust = this.setThrust();
+    update: function () {
         this.velocity.multiplyBy(this.friction);
-        this.velocity.addTo(this.gravity);
         this.position.addTo(this.velocity);
-        this.accelerate(thrust);
+        this.setThrust();
+        this.accelerate(this.thrust);
     },
 
-    draw: function(context) {
+    draw: function (context) {
         context.translate(this.position.getX(), this.position.getY());
         context.rotate(this.angle);
         context.beginPath();
@@ -74,20 +81,20 @@ var shipClass = {
         context.fill();
     },
 
-    angleTo: function(p2) {
+    angleTo: function (p2) {
         return Math.atan2(
-                p2.position.getY() - this.position.getY(),
-                p2.position.getX() - this.position.getX()
-                );
+            p2.position.getY() - this.position.getY(),
+            p2.position.getX() - this.position.getX()
+        );
     },
 
-    distanceTo: function(p2) {
+    distanceTo: function (p2) {
         var dx = p2.position.getX() - this.position.getX(),
             dy = p2.position.getY() - this.position.getY();
         return Math.sqrt(dx * dx + dy * dy);
     },
 
-    gravitateTo: function(p2) {
+    gravitateTo: function (p2) {
         var gravity = vector.create(0, 0),
             dist = this.distanceTo(p2);
 
@@ -97,28 +104,32 @@ var shipClass = {
         this.velocity.addTo(gravity);
     },
 
-    incrementAngle: function(increment) {
+    incrementAngle: function (increment) {
         this.angle += increment;
     },
 
-    startThrusting: function () {
-      this.thrusting = true;
+    startThrusting: function (thrustPower) {
+        this.thrustPower = thrustPower;
+        this.thrusting = true;
     },
 
     stopThrusting: function () {
-      this.thrusting = false;
+        this.thrustPower = 0;
+        this.thrusting = false;
     },
 
-    isThrusting: function() {
+    isThrusting: function () {
         return this.thrusting;
     },
 
     turnLeft: function (turnSpeed) {
-        this.incrementAngle(-turnSpeed);
+        var turn = turnSpeed * this.turningSpeed;
+        this.incrementAngle(-turn);
     },
 
     turnRight: function (turnSpeed) {
-        this.incrementAngle(turnSpeed);
+        var turn = turnSpeed * this.turningSpeed;
+        this.incrementAngle(turn);
     },
 
     stopTurning: function () {
