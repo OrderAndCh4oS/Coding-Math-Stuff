@@ -77,7 +77,7 @@ var shipClass = {
         context.font = "11px Verdana";
         context.fillText(this.kills, -12, -12);
         context.fillStyle = "#000";
-        context.fillText(this.id, -7, 0);
+        context.fillText(this.id, -7, 5);
     },
 
     angleTo: function (p2) {

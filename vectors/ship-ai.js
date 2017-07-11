@@ -15,22 +15,22 @@ window.onload = function() {
         ship.friction = 0.99;
         switch (i % 6) {
             case 0:
-                ship.colour = "#ff0000";
+                ship.colour = "#ff3243";
                 break;
             case 1:
-                ship.colour = "#ff00ff";
+                ship.colour = "#ff4fa9";
                 break;
             case 2:
-                ship.colour = "#00ff00";
+                ship.colour = "#61ff83";
                 break;
             case 3:
-                ship.colour = "#00ffff";
+                ship.colour = "#6ddfff";
                 break;
             case 4:
-                ship.colour = "#0000ff";
+                ship.colour = "#4b6aff";
                 break;
             case 5:
-                ship.colour = "#ffff00";
+                ship.colour = "#ffe76a";
                 break;
         }
         ship.id = i;
@@ -143,7 +143,7 @@ window.onload = function() {
             context.translate(ships[index].position.getX(), ships[index].position.getY());
             context.beginPath();
             context.arc(0, 0, 20, 0, 2 * Math.PI);
-            context.fillStyle = "red";
+            context.fillStyle = "#ff6b1b";
             context.fill();
             context.restore();
             ships.splice(index, 1);
