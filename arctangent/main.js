@@ -12,11 +12,9 @@ window.onload = function() {
 
         function render() {
             context.clearRect(0, 0, width, height);
-
             context.save();
             context.translate(arrowX, arrowY);
             context.rotate(angle);
-
             context.beginPath();
             context.moveTo(20, 0);
             context.lineTo(-20, 0);
@@ -34,6 +32,7 @@ window.onload = function() {
             dX = event.clientX - arrowX;
             dY = event.clientY - arrowY;
             angle = Math.atan2(dY, dX);
+            console.log(angle);
         });
 };
 
