@@ -22,8 +22,8 @@ window.onload = function() {
         context.clearRect(0, 0, width, height);
         context.moveTo(x,y);
         for (var i = 0; i < 300; i++) {
-            thisXAngle = (baseXSpeed * i) + xAngle;
-            thisYAngle = (baseYSpeed * i) + yAngle;
+            var thisXAngle = (baseXSpeed * i) + xAngle;
+            var thisYAngle = (baseYSpeed * i) + yAngle;
             x = centerX + Math.cos(thisXAngle) * xRadius;
             y = centerY + Math.sin(thisYAngle) * yRadius;
             context.beginPath();

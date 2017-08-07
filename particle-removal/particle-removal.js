@@ -7,16 +7,23 @@ window.onload = function() {
         particles = [],
         num = 100;
 
-    for(var i = 0; i < num; i += 1) {
-        particles.push(particle.create(width/2, height/3, Math.random()*7+2, Math.random() * Math.PI * 2, 0.1));
+    function createFirework() {
+        for (var i = 0; i < num; i += 1) {
+            particles.push(particle.create(width / 2, height / 3, Math.random() * 7 + 2, Math.random() * Math.PI * 2, 0.1));
+        }
     }
+
+    createFirework();
     update();
 
     function update() {
         context.clearRect(0, 0, width, height);
         console.log(particles.length);
+        if (particles.length === 0) {
+            createFirework();
+        }
         for(var i = 0; i < particles.length; i += 1) {
-            p = particles[i];
+            var p = particles[i];
             p.update();
 
             context.beginPath();

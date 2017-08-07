@@ -27,10 +27,10 @@ function updateLine(line) {
     nextPoint.setLength(line.speed);
     nextPoint.setAngle(line.angle * Math.PI / 180);
 
-    if (line.i < 300) {
+    if (line.i < 100) {
         line.end.addTo(nextPoint);
         line.points[line.i] = vector.create(line.end.getX(), line.end.getY());
-    } else if (line.i < 600) {
+    } else if (line.i < 200) {
         line.start.addTo(nextPoint);
         line.points.shift()
     } else {
@@ -60,7 +60,7 @@ window.onload = function () {
         lines = [];
 
     for (var i = 0; i < 100; i++) {
-        lines[i] = createLine((30 * i) - (width / 2) - 900, (height / 2), 20, angle, 0);
+        lines[i] = createLine((30 * i) - (width / 2) - 900, (height / 2), 40, angle, 0);
     }
 
     render();
