@@ -6,7 +6,7 @@ window.onload = function () {
   handle = {
     x: width / 2,
     y: height / 2,
-    radius: 20
+    radius: 20,
   }
 
   draw()
