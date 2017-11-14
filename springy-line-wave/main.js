@@ -4,20 +4,16 @@ window.onload = function () {
         width = canvas.width = window.innerWidth,
         height = canvas.height = window.innerHeight,
         mesh = [],
-        angle = 97,
-        length = 25,
-        spacer = 8,
-        modifier = -0.115,
-        pointCount = (width * 1.5) / length,
-        lineCount = height / 3 / spacer,
-        kinks = [],
-        kink = 100,
-        jilt = 0;
+        angle = 0.75,
+        length = 30,
+        spacer = 10,
+        modifier = -0.2,
+        pointCount = width / length,
+        lineCount = height / spacer
 
     for (var i = 0; i < lineCount; i++) {
         var arms = []
-        arms.push(Arm.create(0, i * spacer + (height / 3 - height / 4), length,
-            angle))
+        arms.push(Arm.create(0, i * spacer, length, angle))
         for (var j = 1; j < pointCount; j++) {
             arms.push(
                 Arm.create(arms[j - 1].getEndX(), arms[j - 1].getEndY(), length,
@@ -31,14 +27,9 @@ window.onload = function () {
 
     function render () {
         context.clearRect(0, 0, width, height)
-        for (var k = 0; k < pointCount; k++) {
-            kinks.push(Math.random() * kink)
-        }
         for (var i = 0; i < lineCount; i++) {
             for (var j = 0; j < pointCount; j++) {
-                jilt += Math.random() * 0.0006
-                mesh[i][j].angle = Math.sin(angle + kinks[j] - kink / 2 +
-                    jilt) * modifier
+                mesh[i][j].angle = Math.cos(angle) * modifier
                 if (j > 0) {
                     mesh[i][j].x = mesh[i][j - 1].getEndX()
                     mesh[i][j].y = mesh[i][j - 1].getEndY()
@@ -46,8 +37,8 @@ window.onload = function () {
                 mesh[i][j].render(context)
             }
         }
-
         angle += 0.005
-        //requestAnimationFrame(render)
+
+        requestAnimationFrame(render)
     }
 }
