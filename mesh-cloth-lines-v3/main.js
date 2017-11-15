@@ -6,8 +6,8 @@ window.onload = function () {
         mesh = [],
         angle = 97,
         length = 25,
-        spacer = 8,
-        modifier = -0.05,
+        spacer = 6,
+        modifier = -0.115,
         pointCount = (width * 1.5) / length,
         lineCount = height / 3 / spacer,
         kinks = [],
@@ -23,8 +23,7 @@ window.onload = function () {
                 Arm.create(arms[j - 1].getEndX(), arms[j - 1].getEndY(), length,
                     3));
             arms[j].parent = arms[j - 1];
-            arms[j].jilt = jilt += Math.random() * 0.0012
-            console.log("Jilt: " + arms[j].jilt)
+            arms[j].jilt = Math.sin(jilt += Math.random() * 0.0024)
         }
         mesh.push(arms)
     }
@@ -37,7 +36,6 @@ window.onload = function () {
 
     function render () {
         context.clearRect(0, 0, width, height);
-
         for (var i = 0; i < lineCount; i++) {
             for (var j = 0; j < pointCount; j++) {
                 mesh[i][j].angle = Math.sin(angle + kinks[j] - kink / 2 + mesh[i][j].jilt) * modifier;
@@ -46,13 +44,9 @@ window.onload = function () {
                     mesh[i][j].y = mesh[i][j - 1].getEndY()
                 }
                 mesh[i][j].render(context);
-                // mesh[i][j].jilt -= 0.001
+                mesh[i][j].jilt += Math.random() * 0.0006
             }
         }
-        console.log("Angle: " + angle);
-        console.log("Modifier: " + modifier);
-        console.log("Kinks: " + kinks);
-        console.log("Jilt2: " + jilt);
         angle += 0.005;
         requestAnimationFrame(render)
     }

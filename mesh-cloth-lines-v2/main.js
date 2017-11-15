@@ -23,7 +23,7 @@ window.onload = function () {
                 Arm.create(arms[j - 1].getEndX(), arms[j - 1].getEndY(), length,
                     3));
             arms[j].parent = arms[j - 1];
-            arms[j].jilt = jilt += Math.random() * 0.0006
+            arms[j].jilt = Math.cos(jilt += Math.random() * 0.0024)
         }
         mesh.push(arms)
     }

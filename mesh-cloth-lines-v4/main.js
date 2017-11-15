@@ -1,3 +1,11 @@
+function setKinks (pointCount, kink) {
+    var kinks = []
+    for (var k = 0; k < pointCount; k++) {
+        kinks.push(Math.random() * kink)
+    }
+    return kinks
+}
+
 window.onload = function () {
     var canvas = document.getElementById('canvas'),
         context = canvas.getContext('2d'),
@@ -29,6 +37,7 @@ window.onload = function () {
     inputLength.addEventListener('change', function () {
         length = parseInt(inputLength.value);
         pointCount = (width * 1.5) / length;
+        kinks = setKinks(pointCount, kink)
         render()
     });
     inputAngle.addEventListener('change', function () {
@@ -41,12 +50,15 @@ window.onload = function () {
     });
     inputKink.addEventListener('change', function () {
         kink = parseFloat(inputKink.value);
+        kinks = setKinks(pointCount, kink)
         render()
     });
     inputJilt.addEventListener('change', function () {
         jiltMod = parseFloat(inputJilt.value);
         render()
     });
+
+    kinks = setKinks(pointCount, kink)
 
     render();
 
@@ -56,19 +68,17 @@ window.onload = function () {
         jilt = 0;
         for (var i = 0; i < lineCount; i++) {
             var arms = [];
-            arms.push(Arm.create(0, i * spacer + (height / 3 - height / 4), length,
-                angle));
+            arms.push(
+                Arm.create(0, i * spacer + (height / 2 - height / 6), length,
+                    angle));
             for (var j = 1; j < pointCount; j++) {
                 arms.push(
                     Arm.create(arms[j - 1].getEndX(), arms[j - 1].getEndY(), length,
                         3));
                 arms[j].parent = arms[j - 1];
-                arms[j].jilt = jilt += jiltMod
+                arms[j].jilt = Math.cos(jilt += jiltMod)
             }
             mesh.push(arms)
-        }
-        for (var k = 0; k < pointCount; k++) {
-            kinks.push(Math.random() * kink)
         }
         for (var i = 0; i < lineCount; i++) {
             for (var j = 0; j < pointCount; j++) {
@@ -78,11 +88,9 @@ window.onload = function () {
                     mesh[i][j].y = mesh[i][j - 1].getEndY()
                 }
                 mesh[i][j].render(context);
-                mesh[i][j].jilt -= 0.008
+                // mesh[i][j].jilt -= 0.008
             }
         }
-
-        angle += 0.005
         //requestAnimationFrame(render)
     }
 };
