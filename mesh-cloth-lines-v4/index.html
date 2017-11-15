@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="arm.js"></script>
+    <script src="main.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.8.0/css/tachyons.min.css"/>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-yellow">
+<div class="sliders">
+    <label for="angle">Angle</label>
+    <input type="range" name="angle" id="angle" min="0" max="1200" value="100">
+    <label for="modifier">Modifier</label>
+    <input type="range" name="modifier" id="modifier" min="-12" max="12" step="0.001" value="-0.115">
+    <label for="kink">Kink</label>
+    <input type="range" name="kink" id="kink" min="0" max="3" step="0.0001" value="0.0012">
+    <label for="jilt">Jilt</label>
+    <input type="range" name="jilt" id="jilt" min="0" max="0.0012" step="0.0001" value="0.0006">
+</div>
+<canvas id="canvas"></canvas>
+<a class="f6 link ph3 pv2 mb2 dib white bg-black hover-bg-blue button" href="../">Back</a>
+<div class="logo" style="position: fixed; bottom: 30px; right:30px;">
+    <a href="https://orderandchaoscreative.com">
+        <img src="../img/oacc-logo-web.opt.svg" style="width: 180px; height: auto;">
+    </a>
+</div>
+</body>
+</html>
