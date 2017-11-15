@@ -7,72 +7,82 @@ window.onload = function () {
         angle = 97,
         length = 25,
         spacer = 8,
-        modifier = -0.115,
+        modifier = -0.05,
         pointCount = (width * 1.5) / length,
         lineCount = height / 3 / spacer,
         kinks = [],
         kink = 100,
-        jilt = 0,
+        jilt = 0.006,
+        jiltMod = 0.0012,
+        inputLength,
         inputAngle,
+        inputModifier,
         inputKink,
-        inputJilt
+        inputJilt;
 
-    inputAngle = document.getElementById('angle')
-    inputModifier = document.getElementById('modifier')
-    inputKink = document.getElementById('kink')
-    inputJilt = document.getElementById('jilt')
+    inputLength = document.getElementById('length');
+    inputAngle = document.getElementById('angle');
+    inputModifier = document.getElementById('modifier');
+    inputKink = document.getElementById('kink');
+    inputJilt = document.getElementById('jilt');
 
+    inputLength.addEventListener('change', function () {
+        length = parseInt(inputLength.value);
+        pointCount = (width * 1.5) / length;
+        render()
+    });
     inputAngle.addEventListener('change', function () {
-        angle = parseInt(inputAngle.value)
+        angle = parseInt(inputAngle.value);
         render()
-    })
+    });
     inputModifier.addEventListener('change', function () {
-        modifier = parseFloat(inputModifier.value)
+        modifier = parseFloat(inputModifier.value);
         render()
-    })
+    });
     inputKink.addEventListener('change', function () {
-        kink = parseFloat(inputKink.value)
+        kink = parseFloat(inputKink.value);
         render()
-    })
+    });
     inputJilt.addEventListener('change', function () {
-        jilt = parseFloat(inputJilt.value)
+        jiltMod = parseFloat(inputJilt.value);
         render()
-    })
+    });
 
-    for (var i = 0; i < lineCount; i++) {
-        var arms = []
-        arms.push(Arm.create(0, i * spacer + (height / 3 - height / 4), length,
-            angle))
-        for (var j = 1; j < pointCount; j++) {
-            arms.push(
-                Arm.create(arms[j - 1].getEndX(), arms[j - 1].getEndY(), length,
-                    3))
-            arms[j].parent = arms[j - 1]
-        }
-        mesh.push(arms)
-    }
-
-    render()
+    render();
 
     function render () {
-        context.clearRect(0, 0, width, height)
+        context.clearRect(0, 0, width, height);
+        mesh = [];
+        jilt = 0;
+        for (var i = 0; i < lineCount; i++) {
+            var arms = [];
+            arms.push(Arm.create(0, i * spacer + (height / 3 - height / 4), length,
+                angle));
+            for (var j = 1; j < pointCount; j++) {
+                arms.push(
+                    Arm.create(arms[j - 1].getEndX(), arms[j - 1].getEndY(), length,
+                        3));
+                arms[j].parent = arms[j - 1];
+                arms[j].jilt = jilt += jiltMod
+            }
+            mesh.push(arms)
+        }
         for (var k = 0; k < pointCount; k++) {
             kinks.push(Math.random() * kink)
         }
         for (var i = 0; i < lineCount; i++) {
             for (var j = 0; j < pointCount; j++) {
-                jilt += jilt
-                mesh[i][j].angle = Math.sin(angle + kinks[j] - kink / 2 +
-                    jilt) * modifier
+                mesh[i][j].angle = Math.sin(angle + kinks[j] - kink / 2 + mesh[i][j].jilt) * modifier;
                 if (j > 0) {
-                    mesh[i][j].x = mesh[i][j - 1].getEndX()
+                    mesh[i][j].x = mesh[i][j - 1].getEndX();
                     mesh[i][j].y = mesh[i][j - 1].getEndY()
                 }
-                mesh[i][j].render(context)
+                mesh[i][j].render(context);
+                mesh[i][j].jilt -= 0.008
             }
         }
 
         angle += 0.005
         //requestAnimationFrame(render)
     }
-}
+};

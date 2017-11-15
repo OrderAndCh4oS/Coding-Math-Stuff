@@ -7,23 +7,23 @@ var Arm = Arm || {
     jilt: 0,
 
     create: function (x, y, length, angle) {
-        var obj = Object.create(this)
-        obj.init(x, y, length, angle)
+        var obj = Object.create(this);
+        obj.init(x, y, length, angle);
         return obj
     },
 
     init: function (x, y, length, angle) {
-        this.x = x
-        this.y = y
-        this.length = length
+        this.x = x;
+        this.y = y;
+        this.length = length;
         this.angle = angle
     },
 
     parentAngles: function () {
         var angle = this.angle,
-            parent = this.parent
+            parent = this.parent;
         while (parent) {
-            angle += parent.angle
+            angle += parent.angle;
             parent = parent.parent
         }
         return angle
@@ -38,11 +38,11 @@ var Arm = Arm || {
     },
 
     render: function (context) {
-        context.strokeStyle = '#000000'
-        context.lineWidth = 1
-        context.beginPath()
-        context.moveTo(this.x, this.y)
-        context.lineTo(this.getEndX(), this.getEndY())
+        context.strokeStyle = '#000000';
+        context.lineWidth = 1;
+        context.beginPath();
+        context.moveTo(this.x, this.y);
+        context.lineTo(this.getEndX(), this.getEndY());
         context.stroke()
     },
-}
+};
