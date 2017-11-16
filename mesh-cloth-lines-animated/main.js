@@ -23,33 +23,32 @@ window.onload = function () {
                 Arm.create(arms[j - 1].getEndX(), arms[j - 1].getEndY(), length,
                     3));
             arms[j].parent = arms[j - 1];
-            arms[j].jilt = Math.cos(jilt += Math.random() * 0.0024)
+            arms[j].jilt = Math.cos(jilt += Math.random() * 0.0024);
         }
-        mesh.push(arms)
+        mesh.push(arms);
     }
 
     render();
 
     for (var k = 0; k < pointCount; k++) {
-        kinks.push(Math.random() * kink)
+        kinks.push(Math.random() * kink);
     }
 
     function render () {
         context.clearRect(0, 0, width, height);
-
         for (var i = 0; i < lineCount; i++) {
             for (var j = 0; j < pointCount; j++) {
                 mesh[i][j].angle = Math.sin(angle + kinks[j] - kink / 2 +
                     mesh[i][j].jilt) * modifier;
                 if (j > 0) {
                     mesh[i][j].x = mesh[i][j - 1].getEndX();
-                    mesh[i][j].y = mesh[i][j - 1].getEndY()
+                    mesh[i][j].y = mesh[i][j - 1].getEndY();
                 }
-                mesh[i][j].render(context)
+                mesh[i][j].render(context);
             }
         }
 
         angle += 0.005;
-        requestAnimationFrame(render)
+        requestAnimationFrame(render);
     }
 };
